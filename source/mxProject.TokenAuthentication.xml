@@ -1,0 +1,403 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>mxProject.TokenAuthentication</name>
+    </assembly>
+    <members>
+        <member name="T:mxProject.TokenAuthentication.ITokenClaim">
+            <summary>
+            Define the claim of the token.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.ITokenClaim.JwtID">
+            <summary>
+            Gets the ID.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.ITokenClaim.Audience">
+            <summary>
+            Gets the audience.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.ITokenClaim.Expiration">
+            <summary>
+            Gets the expiration time.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.ITokenClaim.NotBefore">
+            <summary>
+            Gets the notbefore time.
+            </summary>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.ITokenInfo">
+            <summary>
+            Defines the members of the token.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.ITokenInfo.TokenString">
+            <summary>
+            Gets the token string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.ITokenInfo.Expiration">
+            <summary>
+            Gets the token expiration time.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.ITokenInfo.NotBefore">
+            <summary>
+            Gets the token notbefore time.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.ITokenPair">
+            <summary>
+            Pair of access token and refresh token.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.ITokenPair.AccessToken">
+            <summary>
+            Gets the access token.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.ITokenPair.RefreshToken">
+            <summary>
+            Gets the refresh token.
+            </summary>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.ITokenProvider`1">
+            <summary>
+            Define the token provider.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.ITokenProvider`1.CreateToken(mxProject.TokenAuthentication.ITokenClaim,`0)">
+            <summary>
+            Creates a new token.
+            </summary>
+            <param name="claim">The claim.</param>
+            <param name="payload">The payload.</param>
+            <returns>A token string.</returns>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.ITokenRefresher">
+            <summary>
+            Defines methods to refresh the access token.
+            </summary>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.ITokenRefresher.SetToken(mxProject.TokenAuthentication.ITokenPair)">
+            <summary>
+            Sets the token.
+            </summary>
+            <param name="token">The token.</param>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.ITokenRefresher.GetTokenExpiration">
+            <summary>
+            Gets the access token expiration time.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.ITokenRefresher.GetAccessToken">
+            <summary>
+            Gets the access token.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.ITokenRefresher.GetRefreshToken">
+            <summary>
+            Gets the refresh token.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.ITokenRefresher.NeedRefreshToken">
+            <summary>
+            Gets whether or not the access token needs to refresh.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.ITokenRefresher.RefreshToken">
+            <summary>
+            Refreshes the access token.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.ITokenValidator`1">
+            <summary>
+            Define the token validator.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.ITokenValidator`1.ValidateToken(System.String,mxProject.TokenAuthentication.ITokenClaim@,`0@,mxProject.TokenAuthentication.TokenState@,System.String@)">
+            <summary>
+            Validates the specified token.
+            </summary>
+            <param name="token">The token.</param>
+            <param name="claim">The claim obtained from token.</param>
+            <param name="payload">The payload obtained from token.</param>
+            <param name="tokenState">The state of the token.</param>
+            <param name="errorMessage">A message indicating that the token is invalid.</param>
+            <returns>true if it is valid; otherwise false.</returns>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.KnownJwtClaims">
+            <summary>
+            Well-known claims of JWT.
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.KnownJwtClaims.Issuer">
+            <summary>
+            iss : Issuer
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.KnownJwtClaims.Subject">
+            <summary>
+            sub : Subject
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.KnownJwtClaims.Audience">
+            <summary>
+            aud : Audience
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.KnownJwtClaims.Expiration">
+            <summary>
+            exp : Expiration
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.KnownJwtClaims.NotBefore">
+            <summary>
+            nbf : NotBefore
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.KnownJwtClaims.IssuedAt">
+            <summary>
+            iat : IssuedAt
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.KnownJwtClaims.JwtID">
+            <summary>
+            jti : JWT ID
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.KnownJwtClaims.Type">
+            <summary>
+            typ : Type
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.KnownJwtClaims.UserPayload">
+            <summary>
+            payload : Payload object (Not officially reserved)
+            </summary>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.RSAExtensions">
+            <summary>
+            Extension methods for <see cref="T:System.Security.Cryptography.RSA"/>.
+            </summary>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.RSAExtensions.FromXmlStringEx(System.Security.Cryptography.RSA,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="rsa"></param>
+            <param name="xmlString"></param>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.RSAExtensions.ToXmlStringEx(System.Security.Cryptography.RSA,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="rsa"></param>
+            <param name="includePrivateParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.TokenClaim">
+            <summary>
+            Claim of the token.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenClaim.JwtID">
+            <summary>
+            Gets or sets the ID.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenClaim.Audience">
+            <summary>
+            Gets or sets the audience.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenClaim.Expiration">
+            <summary>
+            Gets the expiration time.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenClaim.NotBefore">
+            <summary>
+            Gets the notbefore time.
+            </summary>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.TokenInfo">
+            <summary>
+            Token information.
+            </summary>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.TokenInfo.#ctor(System.String,System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>
+            Create a new instance.
+            </summary>
+            <param name="tokenString">The token string.</param>
+            <param name="expiration">The token expiration time.</param>
+            <param name="notBefore">The token notbefore time.</param>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenInfo.TokenString">
+            <summary>
+            Gets the token string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenInfo.Expiration">
+            <summary>
+            Gets the token expiration time.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenInfo.NotBefore">
+            <summary>
+            Gets the token notbefore time.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.TokenPair">
+            <summary>
+            Pair of access token and refresh token.
+            </summary>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.TokenPair.#ctor(mxProject.TokenAuthentication.ITokenInfo,mxProject.TokenAuthentication.ITokenInfo)">
+            <summary>
+            Create a new instance.
+            </summary>
+            <param name="accessToken">The access token.</param>
+            <param name="refreshToken">The refresh token.</param>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenPair.AccessToken">
+            <summary>
+            Gets the access token.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenPair.RefreshToken">
+            <summary>
+            Gets the refresh token.
+            </summary>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.TokenRefresher">
+            <summary>
+            Manages token updates.
+            </summary>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.TokenRefresher.#ctor(mxProject.TokenAuthentication.RefreshTokenDelegate,System.Int32)">
+            <summary>
+            Create a new instance.
+            </summary>
+            <param name="refreshMethod">The method that refresh the token.</param>
+            <param name="secondsBefore">how many seconds before the expiration time to refresh.</param>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenRefresher.RefreshMethod">
+            <summary>
+            Gets a method that refresh the token.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenRefresher.SecondsBefore">
+            <summary>
+            Gets how many seconds before the expiration time to refresh.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenRefresher.CurrentAccessToken">
+            <summary>
+            Gets the current access token.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.TokenRefresher.CurrentRefreshToken">
+            <summary>
+            Gets the current refresh token.
+            </summary>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.TokenRefresher.SetToken(mxProject.TokenAuthentication.ITokenPair)">
+            <summary>
+            Sets the token.
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.TokenRefresher.GetTokenExpiration">
+            <summary>
+            Gets the access token expiration time.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.TokenRefresher.GetAccessToken">
+            <summary>
+            Gets the access token.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.TokenRefresher.GetRefreshToken">
+            <summary>
+            Gets the refresh token.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.TokenRefresher.NeedRefreshToken">
+            <summary>
+            Gets whether or not the access token needs to refresh.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.TokenRefresher.RefreshToken">
+            <summary>
+            Refreshes the access token.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.TokenRefresher.RefreshToken(System.String)">
+            <summary>
+            Refreshes the access token.
+            </summary>
+            <param name="token">The token.</param>
+            <returns>A new token.</returns>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.TokenState">
+            <summary>
+            State that indicating whether the token is valid.
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.TokenState.Unknown">
+            <summary>
+            Unknown.
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.TokenState.Valid">
+            <summary>
+            The token is valid.
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.TokenState.Invalid">
+            <summary>
+            The Token is invalid for some reason.
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.TokenState.NotBefore">
+            <summary>
+            The token is not valid yet.
+            </summary>
+        </member>
+        <member name="F:mxProject.TokenAuthentication.TokenState.Expired">
+            <summary>
+            Token has expired.
+            </summary>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.RefreshTokenDelegate">
+            <summary>
+            Indicates that this is a method to refresh the specified token.
+            </summary>
+            <param name="tokenString">The token string.</param>
+            <returns>Refreshed new token.</returns>
+        </member>
+    </members>
+</doc>
