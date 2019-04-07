@@ -26,6 +26,16 @@ namespace mxProject.TokenAuthentication
         Invalid,
 
         /// <summary>
+        /// The issuer is invalid.
+        /// </summary>
+        InvalidIssuer,
+
+        /// <summary>
+        /// The audience is invalid.
+        /// </summary>
+        InvalidAudience,
+
+        /// <summary>
         /// The token is not valid yet.
         /// </summary>
         NotBefore,

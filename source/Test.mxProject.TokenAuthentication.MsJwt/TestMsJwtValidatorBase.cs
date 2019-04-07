@@ -147,7 +147,7 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
             if (validateIssuer)
             {
                 Assert.IsFalse(validator.ValidateToken(token, out ITokenClaim tokenClaim, out TestPayload tokenPayload, out TokenState state, out string errorMessage));
-                Assert.AreEqual(state, TokenState.Invalid);
+                Assert.AreEqual(state, TokenState.InvalidIssuer);
             }
             else
             {
@@ -191,7 +191,7 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
             if (validateAudience)
             {
                 Assert.IsFalse(validator.ValidateToken(token, out ITokenClaim tokenClaim, out TestPayload tokenPayload, out TokenState state, out string errorMessage));
-                Assert.AreEqual(state, TokenState.Invalid);
+                Assert.AreEqual(state, TokenState.InvalidAudience);
             }
             else
             {

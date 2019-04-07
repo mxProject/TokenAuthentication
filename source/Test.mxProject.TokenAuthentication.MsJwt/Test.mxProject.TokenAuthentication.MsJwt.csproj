@@ -59,7 +59,7 @@
     <Compile Include="TestPayload.cs" />
     <Compile Include="TestMsJwtProviderBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestTokenRefresher.cs" />
+    <Compile Include="TestTokenManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
