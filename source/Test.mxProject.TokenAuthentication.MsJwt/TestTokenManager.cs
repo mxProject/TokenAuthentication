@@ -6,10 +6,9 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
 {
 
     [TestClass]
-    public class TestTokenRefresher
+    public class TestTokenManager
     {
 
-        readonly MsJwtProviderBase<TestPayload> m_Provider = new TestMsJwtRS256Provider().CreateProvider();
         readonly MsJwtValidatorBase<TestPayload> m_Validator = new TestMsJwtRS256Validator().CreateValidator(TestConstants.Issuer, TestConstants.Audience);
 
         /// <summary>
@@ -19,7 +18,7 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         public void SetToken()
         {
 
-            ITokenPair tokenPair = CreateTokenPair(TestMsJwtProviderBase.CreateClaim(), TestMsJwtProviderBase.CreatePayload());
+            ITokenPair tokenPair = GetToken(TestMsJwtProviderBase.CreateClaim(), TestMsJwtProviderBase.CreatePayload());
 
             TokenManager refresher = CreateRefresher(TestConstants.AccessTokenLifetimeSeconds / 2);
 
@@ -36,7 +35,7 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         public void SetToken_NeedRefresh()
         {
 
-            ITokenPair tokenPair = CreateTokenPair(TestMsJwtProviderBase.CreateClaim(), TestMsJwtProviderBase.CreatePayload());
+            ITokenPair tokenPair = GetToken(TestMsJwtProviderBase.CreateClaim(), TestMsJwtProviderBase.CreatePayload());
 
             TokenManager refresher = CreateRefresher(TestConstants.AccessTokenLifetimeSeconds);
 
@@ -53,7 +52,7 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         public void RefreshToken()
         {
 
-            ITokenPair tokenPair = CreateTokenPair(TestMsJwtProviderBase.CreateClaim(), TestMsJwtProviderBase.CreatePayload());
+            ITokenPair tokenPair = GetToken(TestMsJwtProviderBase.CreateClaim(), TestMsJwtProviderBase.CreatePayload());
 
             TokenManager refresher = CreateRefresher(TestConstants.AccessTokenLifetimeSeconds / 2);
 
@@ -97,7 +96,7 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
                     Expiration = DateTimeOffset.UtcNow.AddSeconds(TestConstants.AccessTokenLifetimeSeconds),
                 };
 
-                return CreateTokenPair(newClaim, payload);
+                return GetToken(newClaim, payload);
 
             }
             , secondsBefore
@@ -111,14 +110,16 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         /// <param name="claim"></param>
         /// <param name="payload"></param>
         /// <returns></returns>
-        private ITokenPair CreateTokenPair(TokenClaim claim, TestPayload payload)
+        private ITokenPair GetToken(TokenClaim claim, TestPayload payload)
         {
 
-            TokenInfo accessToken = new TokenInfo(m_Provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
+            MsJwtProviderBase<TestPayload> provider = new TestMsJwtRS256Provider().CreateProvider();
+
+            TokenInfo accessToken = new TokenInfo(provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
 
             claim.Expiration = DateTimeOffset.UtcNow.AddSeconds(TestConstants.RefreshTokenLifetimeSeconds);
 
-            TokenInfo refreshToken = new TokenInfo(m_Provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
+            TokenInfo refreshToken = new TokenInfo(provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
 
             return new TokenPair(accessToken, refreshToken);
 

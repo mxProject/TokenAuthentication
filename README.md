@@ -18,6 +18,10 @@ mxProject.TokenAuthentication.MsJwt is an example of implementation using System
 * .NET Framework >= 4.6
 * .NET Standard >= 2.0
 
+### mxProject.TokenAuthentication.MsJwt
+* System.IdentityModel.Tokens.Jwt >= 5.4.0
+* Newtonsoft.Json >= 10.0.0
+
 ## Licence
 
 [MIT Licence](http://opensource.org/licenses/mit-license.php)
@@ -93,12 +97,23 @@ string audience = "testAudience";
 ITokenValidator<TestPayload> validator = MsJwtFactory.CreateHs256Validator<TestPayload>(RS256PublicKey, issuer, audience);
 ```
 
+#### TokenState enum
+
+|Value|Description|
+|:--|:--|
+|Unknown|Unknown.|
+|Valid|The token is valid.|
+|Invalid|The Token is invalid for some reason.|
+|InvalidIssuer|The issuer is invalid.|
+|InvalidAudience|The audience is invalid.|
+|NotBefore|The token is not valid yet.|
+|Expired|The token has expired.|
+
 ### Refresh token
 
 TokenManager class holds access token and refresh token, and manages token expiration.
 
 ```C#
-private ITokenProvider<TestPayload> m_Provider;
 private ITokenValidator<TestPayload> m_Validator;
 
 /// <summary>
@@ -116,7 +131,7 @@ public void RefreshToken()
     // omit the implemetation of GetClaim method and GetPayload method.
     ITokenClaim claim = GetClaim();
     TestPayload payload = GetPayload();
-    ITokenPair tokenPair = CreateTokenPair(claim, payload);
+    ITokenPair tokenPair = GetToken(claim, payload);
     manager.SetToken(tokenPair);
 
     // expect false.
@@ -167,7 +182,7 @@ private TokenManager CreateTokenManager(int secondsBefore)
             Expiration = DateTimeOffset.UtcNow.AddSeconds(120),
         };
 
-        return CreateTokenPair(newClaim, payload);
+        return GetToken(newClaim, payload);
 
     }
     , secondsBefore
@@ -175,19 +190,23 @@ private TokenManager CreateTokenManager(int secondsBefore)
 }
 
 /// <summary>
-/// Create a access token and a refresh token.
+/// Get a access token and a refresh token.
 /// </summary>
 /// <param name="claim"></param>
 /// <param name="payload"></param>
 /// <returns></returns>
-private ITokenPair CreateTokenPair(TokenClaim claim, TestPayload payload)
+private ITokenPair GetToken(TokenClaim claim, TestPayload payload)
 {
+
+    // get the token provider.(omit it's implemetation)
+    ITokenProvider<TestPayload> provider = GetProvider();
+    
     // create a access token.
-    TokenInfo accessToken = new TokenInfo(m_Provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
+    TokenInfo accessToken = new TokenInfo(provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
 
     // create a refresh token.
     claim.Expiration = DateTimeOffset.UtcNow.AddSeconds(3600);
-    TokenInfo refreshToken = new TokenInfo(m_Provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
+    TokenInfo refreshToken = new TokenInfo(provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
 
     return new TokenPair(accessToken, refreshToken);
 }

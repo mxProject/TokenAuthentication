@@ -131,11 +131,11 @@ namespace mxProject.TokenAuthentication
                 }
                 return false;
             }
-            catch( SecurityTokenInvalidIssuerException)
+            catch (SecurityTokenInvalidIssuerException)
             {
                 claim = null;
                 payload = default(TPayload);
-                tokenState = TokenState.Invalid;
+                tokenState = TokenState.InvalidIssuer;
                 errorMessage = "The issuer is invalid.";
                 return false;
             }
@@ -143,7 +143,7 @@ namespace mxProject.TokenAuthentication
             {
                 claim = null;
                 payload = default(TPayload);
-                tokenState = TokenState.Invalid;
+                tokenState = TokenState.InvalidAudience;
                 errorMessage = "The audience is invalid.";
                 return false;
             }
