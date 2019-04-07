@@ -1,32 +1,31 @@
 # mxProject.TokenAuthentication
 
-Token authentication interface.
+トークン認証インターフェースライブラリ。
+mxProject.TokenAuthentication にはトークンの生成や検証に関する実装は含んでいません。
+mxProject.TokenAuthentication.MsJwt は System.IdentityModel.Tokens.Jwt を使用した実装の例です。
 
-mxProject.TokenAuthentication does not include an implementation for token generation and validation.
-mxProject.TokenAuthentication.MsJwt is an example of implementation using System.IdentityModel.Tokens.Jwt.
+[English page](README.md)
 
-[Japanese page](README.jp.md)
+## 機能
 
-## Features
+* JWT クレームと任意の型のペイロードを含むトークンを生成します。
+* トークンを検証し、トークンからクレームとペイロードを取得します。
+* トークンの有効期限を管理し、トークンをリフレッシュします。
 
-* Create a token containing the well-known JWT claims and type-safe payload.
-* Validate tokens and retrieve claims and payload.
-* Manage token expiration and refresh tokens.
-
-## Requrements
+## 依存バージョン
 
 * .NET Framework >= 4.6
 * .NET Standard >= 2.0
 
-## Licence
+## ライセンス
 
 [MIT Licence](http://opensource.org/licenses/mit-license.php)
 
-## Usage
+## 使用方法
 
-### Create token
+### トークンの生成
 
-Create a provider and call CreateToken method.
+プロバイダを作成し、プロバイダの CreateToken メソッドを呼び出します。
 
 ```c#
 // create the provider.
@@ -52,7 +51,7 @@ TestPayload payload = new TestPayload
 string tokenString = provider.CreateToken(claim, payload);
 ```
 
-When using RS256, create a provider in the following way.
+RS256を使用する場合は、次の方法でプロバイダを生成します。
 
 ```C#
 // create the provider.
@@ -63,8 +62,7 @@ ITokenProvider<TestPayload> provider = MsJwtFactory.CreateRs256Provider<TestPayl
 
 ### Validate token
 
-Create a validator and call ValidateToken method.
-You can get the claim and payload along with validation results.
+バリデータを作成し、バリデータの ValidateToken メソッドを呼び出します。検証結果と共にクレームとペイロードを取得できます。
 
 ```C#
 // create the validator.
@@ -83,7 +81,7 @@ bool valid = validator.ValidateToken(
     );
 ```
 
-When using RS256, create a validator in the following way.
+RS256を使用する場合は、次の方法でバリデータを生成します。
 
 ```C#
 // create the validator.
@@ -95,7 +93,7 @@ ITokenValidator<TestPayload> validator = MsJwtFactory.CreateHs256Validator<TestP
 
 ### Refresh token
 
-TokenManager class holds access token and refresh token, and manages token expiration.
+TokenManager クラスはアクセストークンとリフレッシュトークンを保持し、トークンの有効期限を管理します。
 
 ```C#
 private ITokenProvider<TestPayload> m_Provider;
