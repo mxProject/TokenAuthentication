@@ -9,40 +9,131 @@
             Create a provider and validator.
             </summary>
         </member>
-        <member name="M:mxProject.TokenAuthentication.MsJwtFactory.CreateRsaProvider``1(System.String)">
+        <member name="M:mxProject.TokenAuthentication.MsJwtFactory.CreateRs256Provider``1(System.String,System.String)">
             <summary>
-            Create a rsa token provider.
+            Create a RS256 token provider.
             </summary>
             <typeparam name="TPayload">The type of the payload.</typeparam>
-            <param name="privateKey">The rsa private key.</param>
+            <param name="privateKey">The RS256 private key.</param>
+            <param name="issuer">The issuer.</param>
             <returns></returns>
         </member>
-        <member name="M:mxProject.TokenAuthentication.MsJwtFactory.CreateRsaValidator``1(System.String)">
+        <member name="M:mxProject.TokenAuthentication.MsJwtFactory.CreateRs256Validator``1(System.String,System.String,System.String)">
             <summary>
-            Create a rsa token validator.
+            Create a RS256 token validator.
             </summary>
             <typeparam name="TPayload">The type of the payload.</typeparam>
-            <param name="publicKey">The rsa public key</param>
+            <param name="publicKey">The RS256 public key</param>
+            <param name="validIssuer">The valid issuer.</param>
+            <param name="validAudience">The valid audience.</param>
             <returns></returns>
         </member>
-        <member name="T:mxProject.TokenAuthentication.MsJwtRsaProvider`1">
+        <member name="M:mxProject.TokenAuthentication.MsJwtFactory.CreateRs256Validator``1(System.String,System.String,System.String[])">
             <summary>
-            RSA token provider.
+            Create a RS256 token validator.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+            <param name="publicKey">The RS256 public key</param>
+            <param name="validIssuer">The valid issuer.</param>
+            <param name="validAudiences">The valid audiences.</param>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.MsJwtFactory.CreateRs256Validator``1(System.String,System.String[],System.String[])">
+            <summary>
+            Create a RS256 token validator.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+            <param name="publicKey">The RS256 public key</param>
+            <param name="validIssuers">The valid issuers.</param>
+            <param name="validAudiences">The valid audiences.</param>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.MsJwtFactory.CreateHs256Provider``1(System.String,System.String)">
+            <summary>
+            Create a HS256 token provider.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+            <param name="commonKey">The HS256 common key.</param>
+            <param name="issuer">The issuer.</param>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.MsJwtFactory.CreateHs256Validator``1(System.String,System.String,System.String)">
+            <summary>
+            Create a RS256 token validator.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+            <param name="commonKey">The HS256 common key</param>
+            <param name="validIssuer">The valid issuer.</param>
+            <param name="validAudience">The valid audience.</param>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.MsJwtFactory.CreateHs256Validator``1(System.String,System.String,System.String[])">
+            <summary>
+            Create a RS256 token validator.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+            <param name="commonKey">The HS256 common key</param>
+            <param name="validIssuer">The valid issuer.</param>
+            <param name="validAudiences">The valid audiences.</param>
+            <returns></returns>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.MsJwtFactory.CreateHs256Validator``1(System.String,System.String[],System.String[])">
+            <summary>
+            Create a HS256 token validator.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+            <param name="commonKey">The HS256 common key</param>
+            <param name="validIssuers">The valid issuers.</param>
+            <param name="validAudiences">The valid audiences.</param>
+            <returns></returns>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.MsJwtHs256Provider`1">
+            <summary>
+            HS256 token provider.
             </summary>
             <typeparam name="TPayload">The type of the payload.</typeparam>
         </member>
-        <member name="M:mxProject.TokenAuthentication.MsJwtRsaProvider`1.#ctor(Microsoft.IdentityModel.Tokens.RsaSecurityKey)">
+        <member name="M:mxProject.TokenAuthentication.MsJwtHs256Provider`1.#ctor(Microsoft.IdentityModel.Tokens.SymmetricSecurityKey)">
             <summary>
             Create a new instance.
             </summary>
-            <param name="privateKey">The rsa private key.</param>
+            <param name="commonKey">The HS256 common key.</param>
         </member>
-        <member name="P:mxProject.TokenAuthentication.MsJwtRsaProvider`1.Issuer">
+        <member name="M:mxProject.TokenAuthentication.MsJwtHs256Provider`1.GetSigningCredentials">
+            <summary>
+            Gets the credentials.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.MsJwtHs256Validator`1">
+            <summary>
+            HS256 Token validator.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.MsJwtHs256Validator`1.#ctor(Microsoft.IdentityModel.Tokens.SymmetricSecurityKey)">
+            <summary>
+            Create a new instance.
+            </summary>
+            <param name="publicKey">The HS256 public key.</param>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.MsJwtProviderBase`1">
+            <summary>
+            Basic implementation of token provider.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.MsJwtProviderBase`1.#ctor">
+            <summary>
+            Create a new instance.
+            </summary>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.MsJwtProviderBase`1.Issuer">
             <summary>
             Gets or sets the issuer.
             </summary>
         </member>
-        <member name="M:mxProject.TokenAuthentication.MsJwtRsaProvider`1.CreateToken(mxProject.TokenAuthentication.ITokenClaim,`0)">
+        <member name="M:mxProject.TokenAuthentication.MsJwtProviderBase`1.CreateToken(mxProject.TokenAuthentication.ITokenClaim,`0)">
             <summary>
             Creates a new token.
             </summary>
@@ -53,29 +144,65 @@
             <paramref name="claim"/>> is null.
             </exception>
         </member>
-        <member name="T:mxProject.TokenAuthentication.MsJwtRsaValidator`1">
+        <member name="M:mxProject.TokenAuthentication.MsJwtProviderBase`1.GetSigningCredentials">
             <summary>
-            RSA Token validator.
+            Gets the credentials.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.MsJwtRs256Provider`1">
+            <summary>
+            RS256 token provider.
             </summary>
             <typeparam name="TPayload">The type of the payload.</typeparam>
         </member>
-        <member name="M:mxProject.TokenAuthentication.MsJwtRsaValidator`1.#ctor(Microsoft.IdentityModel.Tokens.RsaSecurityKey)">
+        <member name="M:mxProject.TokenAuthentication.MsJwtRs256Provider`1.#ctor(Microsoft.IdentityModel.Tokens.RsaSecurityKey)">
             <summary>
             Create a new instance.
             </summary>
-            <param name="publicKey">The rsa public key.</param>
+            <param name="privateKey">The RS256 private key.</param>
         </member>
-        <member name="P:mxProject.TokenAuthentication.MsJwtRsaValidator`1.ValidIssuers">
+        <member name="M:mxProject.TokenAuthentication.MsJwtRs256Provider`1.GetSigningCredentials">
+            <summary>
+            Gets the credentials.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.MsJwtRs256Validator`1">
+            <summary>
+            RS256 Token validator.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.MsJwtRs256Validator`1.#ctor(Microsoft.IdentityModel.Tokens.RsaSecurityKey)">
+            <summary>
+            Create a new instance.
+            </summary>
+            <param name="publicKey">The RS256 public key.</param>
+        </member>
+        <member name="T:mxProject.TokenAuthentication.MsJwtValidatorBase`1">
+            <summary>
+            Basic implementation of token validator.
+            </summary>
+            <typeparam name="TPayload">The type of the payload.</typeparam>
+        </member>
+        <member name="M:mxProject.TokenAuthentication.MsJwtValidatorBase`1.#ctor(Microsoft.IdentityModel.Tokens.SecurityKey)">
+            <summary>
+            Create a new instance.
+            </summary>
+            <param name="key">The security key.</param>
+        </member>
+        <member name="P:mxProject.TokenAuthentication.MsJwtValidatorBase`1.ValidIssuers">
             <summary>
             Gets or sets the valid issuers.
             </summary>
         </member>
-        <member name="P:mxProject.TokenAuthentication.MsJwtRsaValidator`1.ValidAudiences">
+        <member name="P:mxProject.TokenAuthentication.MsJwtValidatorBase`1.ValidAudiences">
             <summary>
             Gets or sets the valid audiences.
             </summary>
         </member>
-        <member name="M:mxProject.TokenAuthentication.MsJwtRsaValidator`1.ValidateToken(System.String,mxProject.TokenAuthentication.ITokenClaim@,`0@,mxProject.TokenAuthentication.TokenState@,System.String@)">
+        <member name="M:mxProject.TokenAuthentication.MsJwtValidatorBase`1.ValidateToken(System.String,mxProject.TokenAuthentication.ITokenClaim@,`0@,mxProject.TokenAuthentication.TokenState@,System.String@)">
             <summary>
             Validates the specified token.
             </summary>
@@ -86,7 +213,7 @@
             <param name="errorMessage">A message indicating that the token is invalid.</param>
             <returns>true if it is valid; otherwise false.</returns>
         </member>
-        <member name="M:mxProject.TokenAuthentication.MsJwtRsaValidator`1.GetClaim(System.Security.Claims.ClaimsPrincipal,System.String)">
+        <member name="M:mxProject.TokenAuthentication.MsJwtValidatorBase`1.GetClaim(System.Security.Claims.ClaimsPrincipal,System.String)">
             <summary>
             
             </summary>
@@ -94,7 +221,7 @@
             <param name="key"></param>
             <returns></returns>
         </member>
-        <member name="M:mxProject.TokenAuthentication.MsJwtRsaValidator`1.ValidateLifetime(System.Nullable{System.DateTime},System.Nullable{System.DateTime},mxProject.TokenAuthentication.TokenState@,System.String@)">
+        <member name="M:mxProject.TokenAuthentication.MsJwtValidatorBase`1.ValidateLifetime(System.Nullable{System.DateTime},System.Nullable{System.DateTime},mxProject.TokenAuthentication.TokenState@,System.String@)">
             <summary>
             
             </summary>
@@ -104,14 +231,14 @@
             <param name="message"></param>
             <returns></returns>
         </member>
-        <member name="M:mxProject.TokenAuthentication.MsJwtRsaValidator`1.ToDateTimeOffset(System.String)">
+        <member name="M:mxProject.TokenAuthentication.MsJwtValidatorBase`1.ToDateTimeOffset(System.String)">
             <summary>
             
             </summary>
             <param name="seconds"></param>
             <returns></returns>
         </member>
-        <member name="M:mxProject.TokenAuthentication.MsJwtRsaValidator`1.ToDateTimeOffsetOrNull(System.String)">
+        <member name="M:mxProject.TokenAuthentication.MsJwtValidatorBase`1.ToDateTimeOffsetOrNull(System.String)">
             <summary>
             
             </summary>

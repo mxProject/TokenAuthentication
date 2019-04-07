@@ -8,7 +8,7 @@ namespace mxProject.TokenAuthentication
     /// <summary>
     /// Defines methods to refresh the access token.
     /// </summary>
-    public interface ITokenRefresher
+    public interface ITokenManager
     {
 
         /// <summary>

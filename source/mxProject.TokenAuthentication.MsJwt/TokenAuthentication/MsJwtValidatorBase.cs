@@ -11,10 +11,10 @@ namespace mxProject.TokenAuthentication
 {
 
     /// <summary>
-    /// RSA Token validator.
+    /// Basic implementation of token validator.
     /// </summary>
     /// <typeparam name="TPayload">The type of the payload.</typeparam>
-    public class MsJwtRsaValidator<TPayload> : ITokenValidator<TPayload>
+    public abstract class MsJwtValidatorBase<TPayload> : ITokenValidator<TPayload>
     {
 
         #region ctor
@@ -22,22 +22,20 @@ namespace mxProject.TokenAuthentication
         /// <summary>
         /// Create a new instance.
         /// </summary>
-        /// <param name="publicKey">The rsa public key.</param>
-        public MsJwtRsaValidator(RsaSecurityKey publicKey)
+        /// <param name="key">The security key.</param>
+        protected MsJwtValidatorBase(SecurityKey key)
         {
-            m_Key = publicKey;
-
+            m_SecurityKey = key;
             m_LifetimeValidator = new LifetimeValidator((nbf, exp, token, parameter) =>
             {
                 return ValidateLifetime(nbf, exp, out TokenState state, out string message);
             }
             );
-
         }
 
         #endregion
-        
-        private readonly RsaSecurityKey m_Key;
+
+        private readonly SecurityKey m_SecurityKey;
         private readonly JwtSecurityTokenHandler m_TokenHandler = new JwtSecurityTokenHandler();
         private readonly LifetimeValidator m_LifetimeValidator;
 
@@ -65,7 +63,7 @@ namespace mxProject.TokenAuthentication
 
             TokenValidationParameters parameters = new TokenValidationParameters { };
 
-            parameters.IssuerSigningKey = m_Key;
+            parameters.IssuerSigningKey = m_SecurityKey;
             parameters.ValidateIssuerSigningKey = true;
 
             if (ValidIssuers != null && ValidIssuers.Length > 0)

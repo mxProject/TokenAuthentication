@@ -8,8 +8,7 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
     /// <summary>
     /// 
     /// </summary>
-    [TestClass]
-    public class TestMsJwtRsaProvider
+    public abstract class TestMsJwtProviderBase
     {
 
         /// <summary>
@@ -111,10 +110,10 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         /// <param name="claim"></param>
         /// <param name="payload"></param>
         /// <returns></returns>
-        internal static string CreateToken(TokenClaim claim, TestPayload payload)
+        public string CreateToken(TokenClaim claim, TestPayload payload)
         {
 
-            MsJwtRsaProvider<TestPayload> provider = CreateProvider();
+            MsJwtProviderBase<TestPayload> provider = CreateProvider();
 
             return provider.CreateToken(claim, payload);
 
@@ -124,14 +123,7 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         /// 
         /// </summary>
         /// <returns></returns>
-        internal static MsJwtRsaProvider<TestPayload> CreateProvider()
-        {
-            MsJwtRsaProvider<TestPayload> provider = MsJwtFactory.CreateRsaProvider<TestPayload>(TestConstants.RsaPrivateKey);
-
-            provider.Issuer = TestConstants.Issuer;
-
-            return provider;
-        }
+        public abstract MsJwtProviderBase<TestPayload> CreateProvider();
 
     }
 }

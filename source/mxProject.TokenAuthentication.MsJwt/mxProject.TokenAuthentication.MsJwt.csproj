@@ -3,6 +3,14 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <RootNamespace>mxProject</RootNamespace>
+    <Version>0.5.1</Version>
+    <Authors>mxProject</Authors>
+    <Company />
+    <Copyright>Copyright 2019 mxProject</Copyright>
+    <PackageLicenseUrl>http://opensource.org/licenses/mit-license.php</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/mxProject/TokenAuthentication</PackageProjectUrl>
+    <PackageTags>JWT</PackageTags>
+    <Description>Implementation of mxProject.TokenAuthentication by System.IdentityModel.Tokens.Jwt.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">

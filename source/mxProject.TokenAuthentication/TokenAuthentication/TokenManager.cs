@@ -8,7 +8,7 @@ namespace mxProject.TokenAuthentication
     /// <summary>
     /// Manages token updates.
     /// </summary>
-    public class TokenRefresher : ITokenRefresher
+    public class TokenManager : ITokenManager
     {
 
         #region ctor
@@ -18,7 +18,7 @@ namespace mxProject.TokenAuthentication
         /// </summary>
         /// <param name="refreshMethod">The method that refresh the token.</param>
         /// <param name="secondsBefore">how many seconds before the expiration time to refresh.</param>
-        public TokenRefresher(RefreshTokenDelegate refreshMethod, int secondsBefore)
+        public TokenManager(RefreshTokenDelegate refreshMethod, int secondsBefore)
         {
             RefreshMethod = refreshMethod;
             SecondsBefore = secondsBefore;

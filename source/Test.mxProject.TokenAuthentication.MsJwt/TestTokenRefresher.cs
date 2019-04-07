@@ -9,8 +9,8 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
     public class TestTokenRefresher
     {
 
-        readonly MsJwtRsaProvider<TestPayload> m_Provider = TestMsJwtRsaProvider.CreateProvider();
-        readonly MsJwtRsaValidator<TestPayload> m_Validator = TestMsJwtRsaValidator.CreateValidator(TestConstants.Issuer, TestConstants.Audience);
+        readonly MsJwtProviderBase<TestPayload> m_Provider = new TestMsJwtRS256Provider().CreateProvider();
+        readonly MsJwtValidatorBase<TestPayload> m_Validator = new TestMsJwtRS256Validator().CreateValidator(TestConstants.Issuer, TestConstants.Audience);
 
         /// <summary>
         /// 
@@ -19,9 +19,9 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         public void SetToken()
         {
 
-            ITokenPair tokenPair = CreateTokenPair(TestMsJwtRsaProvider.CreateClaim(), TestMsJwtRsaProvider.CreatePayload());
+            ITokenPair tokenPair = CreateTokenPair(TestMsJwtProviderBase.CreateClaim(), TestMsJwtProviderBase.CreatePayload());
 
-            TokenRefresher refresher = CreateRefresher(TestConstants.AccessTokenLifetimeSeconds / 2);
+            TokenManager refresher = CreateRefresher(TestConstants.AccessTokenLifetimeSeconds / 2);
 
             refresher.SetToken(tokenPair);
 
@@ -36,9 +36,9 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         public void SetToken_NeedRefresh()
         {
 
-            ITokenPair tokenPair = CreateTokenPair(TestMsJwtRsaProvider.CreateClaim(), TestMsJwtRsaProvider.CreatePayload());
+            ITokenPair tokenPair = CreateTokenPair(TestMsJwtProviderBase.CreateClaim(), TestMsJwtProviderBase.CreatePayload());
 
-            TokenRefresher refresher = CreateRefresher(TestConstants.AccessTokenLifetimeSeconds);
+            TokenManager refresher = CreateRefresher(TestConstants.AccessTokenLifetimeSeconds);
 
             refresher.SetToken(tokenPair);
 
@@ -53,9 +53,9 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         public void RefreshToken()
         {
 
-            ITokenPair tokenPair = CreateTokenPair(TestMsJwtRsaProvider.CreateClaim(), TestMsJwtRsaProvider.CreatePayload());
+            ITokenPair tokenPair = CreateTokenPair(TestMsJwtProviderBase.CreateClaim(), TestMsJwtProviderBase.CreatePayload());
 
-            TokenRefresher refresher = CreateRefresher(TestConstants.AccessTokenLifetimeSeconds / 2);
+            TokenManager refresher = CreateRefresher(TestConstants.AccessTokenLifetimeSeconds / 2);
 
             refresher.SetToken(tokenPair);
 
@@ -79,10 +79,10 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         /// </summary>
         /// <param name="secondsBefore"></param>
         /// <returns></returns>
-        private TokenRefresher CreateRefresher(int secondsBefore)
+        private TokenManager CreateRefresher(int secondsBefore)
         {
 
-            return new TokenRefresher(token =>
+            return new TokenManager(token =>
             {
 
                 if (!m_Validator.ValidateToken(token, out ITokenClaim claim, out TestPayload payload, out TokenState state, out string errorMessage))
