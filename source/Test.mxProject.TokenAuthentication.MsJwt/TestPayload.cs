@@ -10,7 +10,7 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
     /// <summary>
     /// 
     /// </summary>
-    class TestPayload
+    public class TestPayload
     {
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
     /// <summary>
     /// 
     /// </summary>
-    class TestPayloadItem
+    public class TestPayloadItem
     {
         public string Value { get; set; }
     }

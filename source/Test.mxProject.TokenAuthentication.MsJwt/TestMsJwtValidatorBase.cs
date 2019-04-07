@@ -8,9 +8,22 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
     /// <summary>
     /// 
     /// </summary>
-    [TestClass]
-    public class TestMsJwtRsaValidator
+    public abstract class TestMsJwtValidatorBase
     {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public abstract MsJwtProviderBase<TestPayload> GetProvider();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="issuer"></param>
+        /// <param name="audience"></param>
+        /// <returns></returns>
+        public abstract MsJwtValidatorBase<TestPayload> CreateValidator(string issuer, string audience);
 
         /// <summary>
         /// 
@@ -19,12 +32,12 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         public void CreateToken()
         {
 
-            TokenClaim claim = TestMsJwtRsaProvider.CreateClaim();
-            TestPayload payload = TestMsJwtRsaProvider.CreatePayload();
+            TokenClaim claim = TestMsJwtProviderBase.CreateClaim();
+            TestPayload payload = TestMsJwtProviderBase.CreatePayload();
 
-            string token = TestMsJwtRsaProvider.CreateToken(claim, payload);
+            string token = GetProvider().CreateToken(claim, payload);
 
-            MsJwtRsaValidator<TestPayload> validator = CreateValidator(TestConstants.Issuer, TestConstants.Audience);
+            MsJwtValidatorBase<TestPayload> validator = CreateValidator(TestConstants.Issuer, TestConstants.Audience);
 
             Assert.IsTrue(validator.ValidateToken(token, out ITokenClaim tokenClaim, out TestPayload tokenPayload, out TokenState state, out string errorMessage));
 
@@ -41,12 +54,12 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         public void CreateToken_NullPayload()
         {
 
-            TokenClaim claim = TestMsJwtRsaProvider.CreateClaim();
+            TokenClaim claim = TestMsJwtProviderBase.CreateClaim();
             TestPayload payload = null;
 
-            string token = TestMsJwtRsaProvider.CreateToken(claim, payload);
+            string token = GetProvider().CreateToken(claim, payload);
 
-            MsJwtRsaValidator<TestPayload> validator = CreateValidator(TestConstants.Issuer, TestConstants.Audience);
+            MsJwtValidatorBase<TestPayload> validator = CreateValidator(TestConstants.Issuer, TestConstants.Audience);
 
             Assert.IsTrue(validator.ValidateToken(token, out ITokenClaim tokenClaim, out TestPayload tokenPayload, out TokenState state, out string errorMessage));
 
@@ -63,14 +76,14 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         public void CreateToken_Expired()
         {
 
-            TokenClaim claim = TestMsJwtRsaProvider.CreateClaim();
-            TestPayload payload = TestMsJwtRsaProvider.CreatePayload();
+            TokenClaim claim = TestMsJwtProviderBase.CreateClaim();
+            TestPayload payload = TestMsJwtProviderBase.CreatePayload();
 
             claim.Expiration = DateTimeOffset.UtcNow.AddSeconds(-1);
 
-            string token = TestMsJwtRsaProvider.CreateToken(claim, payload);
+            string token = GetProvider().CreateToken(claim, payload);
 
-            MsJwtRsaValidator<TestPayload> validator = CreateValidator(TestConstants.Issuer, TestConstants.Audience);
+            MsJwtValidatorBase<TestPayload> validator = CreateValidator(TestConstants.Issuer, TestConstants.Audience);
 
             Assert.IsFalse(validator.ValidateToken(token, out ITokenClaim tokenClaim, out TestPayload tokenPayload, out TokenState state, out string errorMessage));
 
@@ -85,14 +98,14 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         public void CreateToken_NotBefore()
         {
 
-            TokenClaim claim = TestMsJwtRsaProvider.CreateClaim();
-            TestPayload payload = TestMsJwtRsaProvider.CreatePayload();
+            TokenClaim claim = TestMsJwtProviderBase.CreateClaim();
+            TestPayload payload = TestMsJwtProviderBase.CreatePayload();
 
             claim.NotBefore = DateTimeOffset.UtcNow.AddSeconds(5);
 
-            string token = TestMsJwtRsaProvider.CreateToken(claim, payload);
+            string token = GetProvider().CreateToken(claim, payload);
 
-            MsJwtRsaValidator<TestPayload> validator = CreateValidator(TestConstants.Issuer, TestConstants.Audience);
+            MsJwtValidatorBase<TestPayload> validator = CreateValidator(TestConstants.Issuer, TestConstants.Audience);
 
             Assert.IsFalse(validator.ValidateToken(token, out ITokenClaim tokenClaim, out TestPayload tokenPayload, out TokenState state, out string errorMessage));
 
@@ -124,12 +137,12 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         private void CreateToken_InvalidIssuer(bool validateIssuer)
         {
 
-            TokenClaim claim = TestMsJwtRsaProvider.CreateClaim();
-            TestPayload payload = TestMsJwtRsaProvider.CreatePayload();
+            TokenClaim claim = TestMsJwtProviderBase.CreateClaim();
+            TestPayload payload = TestMsJwtProviderBase.CreatePayload();
 
-            string token = TestMsJwtRsaProvider.CreateToken(claim, payload);
+            string token = GetProvider().CreateToken(claim, payload);
 
-            MsJwtRsaValidator<TestPayload> validator = CreateValidator(validateIssuer ? "thisIssuer" : null, TestConstants.Audience);
+            MsJwtValidatorBase<TestPayload> validator = CreateValidator(validateIssuer ? "thisIssuer" : null, TestConstants.Audience);
 
             if (validateIssuer)
             {
@@ -168,12 +181,12 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
         private void CreateToken_InvalidAudience(bool validateAudience)
         {
 
-            TokenClaim claim = TestMsJwtRsaProvider.CreateClaim();
-            TestPayload payload = TestMsJwtRsaProvider.CreatePayload();
+            TokenClaim claim = TestMsJwtProviderBase.CreateClaim();
+            TestPayload payload = TestMsJwtProviderBase.CreatePayload();
 
-            string token = TestMsJwtRsaProvider.CreateToken(claim, payload);
+            string token = GetProvider().CreateToken(claim, payload);
 
-            MsJwtRsaValidator<TestPayload> validator = CreateValidator(TestConstants.Issuer, validateAudience ? "thisAudience" : null);
+            MsJwtValidatorBase<TestPayload> validator = CreateValidator(TestConstants.Issuer, validateAudience ? "thisAudience" : null);
 
             if (validateAudience)
             {
@@ -230,26 +243,5 @@ namespace Test.mxProject.TokenAuthentication.MsJwt
             return true;
         }
         
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        internal static MsJwtRsaValidator<TestPayload> CreateValidator(string issuer, string audience)
-        {
-            MsJwtRsaValidator<TestPayload> validator = MsJwtFactory.CreateRsaValidator<TestPayload>(TestConstants.RsaPublicKey);
-
-            if (!string.IsNullOrEmpty(issuer))
-            {
-                validator.ValidIssuers = new string[] { issuer };
-            }
-
-            if (!string.IsNullOrEmpty(audience))
-            {
-                validator.ValidAudiences = new string[] { audience };
-            }
-
-            return validator;
-        }
-
     }
 }

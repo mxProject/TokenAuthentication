@@ -10,10 +10,10 @@ namespace mxProject.TokenAuthentication
 {
 
     /// <summary>
-    /// RSA token provider.
+    /// Basic implementation of token provider.
     /// </summary>
     /// <typeparam name="TPayload">The type of the payload.</typeparam>
-    public class MsJwtRsaProvider<TPayload> : ITokenProvider<TPayload>
+    public abstract class MsJwtProviderBase<TPayload> : ITokenProvider<TPayload>
     {
 
         #region ctor
@@ -21,15 +21,12 @@ namespace mxProject.TokenAuthentication
         /// <summary>
         /// Create a new instance.
         /// </summary>
-        /// <param name="privateKey">The rsa private key.</param>
-        public MsJwtRsaProvider(RsaSecurityKey privateKey)
+        protected MsJwtProviderBase()
         {
-            m_PrivateKey = privateKey;
         }
 
         #endregion
 
-        private readonly RsaSecurityKey m_PrivateKey;
         private readonly JwtSecurityTokenHandler m_TokenHandler = new JwtSecurityTokenHandler();
 
         /// <summary>
@@ -54,11 +51,9 @@ namespace mxProject.TokenAuthentication
                 throw new ArgumentNullException("claim");
             }
 
-            var credentials = new SigningCredentials(m_PrivateKey, SecurityAlgorithms.RsaSha256);
-
             var descriptor = new SecurityTokenDescriptor { };
 
-            descriptor.SigningCredentials = credentials;
+            descriptor.SigningCredentials = GetSigningCredentials();
             descriptor.Issuer = Issuer;
             descriptor.Audience = claim.Audience;
             descriptor.Expires = claim.Expiration.UtcDateTime;
@@ -86,6 +81,12 @@ namespace mxProject.TokenAuthentication
             return tokenString;
 
         }
+
+        /// <summary>
+        /// Gets the credentials.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract SigningCredentials GetSigningCredentials();
 
     }
 
