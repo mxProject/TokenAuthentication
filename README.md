@@ -26,9 +26,24 @@ mxProject.TokenAuthentication.MsJwt is an example of implementation using System
 
 [MIT Licence](http://opensource.org/licenses/mit-license.php)
 
+## NuGet
+
+[mxProject.TokenAuthentication](https://www.nuget.org/packages/mxProject.TokenAuthentication)
+[mxProject.TokenAuthentication.MsJwt](https://www.nuget.org/packages/mxProject.TokenAuthentication.MsJwt)
+
 ## Usage
 
-### Create token
+TestPayload class used in the following sample code is the following POCO class.
+
+```C#
+public class TestPayload
+{
+    public IntValue { get; set; }
+    public StringValue { get; set; }
+}
+```
+
+### Creates token
 
 Create a provider and call CreateToken method.
 
@@ -36,7 +51,8 @@ Create a provider and call CreateToken method.
 // create the provider.
 string HS256CommonKey = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
 string issuer = "testIssuer";
-ITokenProvider<TestPayload> provider = MsJwtFactory.CreateHs256Provider<TestPayload>(HS256CommonKey, issuer);
+ITokenProvider<TestPayload> provider
+    = MsJwtFactory.CreateHs256Provider<TestPayload>(HS256CommonKey, issuer);
 
 // create a claim and a payload.
 ITokenClaim claim = new TokenClaim
@@ -62,10 +78,11 @@ When using RS256, create a provider in the following way.
 // create the provider.
 string RS256PrivateKey = "<RSAKeyValue><Modulus>yT12/iqZ ... mLenuDgQ==</D></RSAKeyValue>";
 string issuer = "testIssuer";
-ITokenProvider<TestPayload> provider = MsJwtFactory.CreateRs256Provider<TestPayload>(RS256PrivateKey, issuer);
+ITokenProvider<TestPayload> provider
+    = MsJwtFactory.CreateRs256Provider<TestPayload>(RS256PrivateKey, issuer);
 ```
 
-### Validate token
+### Validates token
 
 Create a validator and call ValidateToken method.
 You can get the claim and payload along with validation results.
@@ -75,7 +92,8 @@ You can get the claim and payload along with validation results.
 string HS256CommonKey = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
 string issuer = "testIssuer";
 string audience = "testAudience";
-ITokenValidator<TestPayload> validator = MsJwtFactory.CreateHs256Validator<TestPayload>(HS256CommonKey, issuer, audience);
+ITokenValidator<TestPayload> validator
+    = MsJwtFactory.CreateHs256Validator<TestPayload>(HS256CommonKey, issuer, audience);
 
 // validate the token.
 bool valid = validator.ValidateToken(
@@ -94,7 +112,8 @@ When using RS256, create a validator in the following way.
 string RS256PublicKey = "<RSAKeyValue><Modulus>yT12/iqZ ... XrBw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
 string issuer = "testIssuer";
 string audience = "testAudience";
-ITokenValidator<TestPayload> validator = MsJwtFactory.CreateHs256Validator<TestPayload>(RS256PublicKey, issuer, audience);
+ITokenValidator<TestPayload> validator
+    = MsJwtFactory.CreateHs256Validator<TestPayload>(RS256PublicKey, issuer, audience);
 ```
 
 #### TokenState enum
@@ -109,7 +128,7 @@ ITokenValidator<TestPayload> validator = MsJwtFactory.CreateHs256Validator<TestP
 |NotBefore|The token is not valid yet.|
 |Expired|The token has expired.|
 
-### Refresh token
+### Refreshes token
 
 TokenManager class holds access token and refresh token, and manages token expiration.
 
@@ -202,11 +221,19 @@ private ITokenPair GetToken(TokenClaim claim, TestPayload payload)
     ITokenProvider<TestPayload> provider = GetProvider();
     
     // create a access token.
-    TokenInfo accessToken = new TokenInfo(provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
+    TokenInfo accessToken = new TokenInfo(
+        provider.CreateToken(claim, payload)
+        , claim.Expiration
+        , claim.NotBefore
+        );
 
     // create a refresh token.
     claim.Expiration = DateTimeOffset.UtcNow.AddSeconds(3600);
-    TokenInfo refreshToken = new TokenInfo(provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
+    TokenInfo refreshToken = new TokenInfo(
+        provider.CreateToken(claim, payload)
+        , claim.Expiration
+        , claim.NotBefore
+        );
 
     return new TokenPair(accessToken, refreshToken);
 }

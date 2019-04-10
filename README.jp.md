@@ -25,7 +25,22 @@ mxProject.TokenAuthentication.MsJwt は System.IdentityModel.Tokens.Jwt を使�
 
 [MIT Licence](http://opensource.org/licenses/mit-license.php)
 
+## NuGet
+
+[mxProject.TokenAuthentication](https://www.nuget.org/packages/mxProject.TokenAuthentication)
+[mxProject.TokenAuthentication.MsJwt](https://www.nuget.org/packages/mxProject.TokenAuthentication.MsJwt)
+
 ## 使用方法
+
+以降のサンプルコードで使用している TestPayload クラスは、次のような POCO クラスです。
+
+```C#
+public class TestPayload
+{
+    public IntValue { get; set; }
+    public StringValue { get; set; }
+}
+```
 
 ### トークンの生成
 
@@ -35,7 +50,8 @@ mxProject.TokenAuthentication.MsJwt は System.IdentityModel.Tokens.Jwt を使�
 // create the provider.
 string HS256CommonKey = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
 string issuer = "testIssuer";
-ITokenProvider<TestPayload> provider = MsJwtFactory.CreateHs256Provider<TestPayload>(HS256CommonKey, issuer);
+ITokenProvider<TestPayload> provider
+    = MsJwtFactory.CreateHs256Provider<TestPayload>(HS256CommonKey, issuer);
 
 // create a claim and a payload.
 ITokenClaim claim = new TokenClaim
@@ -61,7 +77,8 @@ RS256を使用する場合は、次の方法でプロバイダを生成します
 // create the provider.
 string RS256PrivateKey = "<RSAKeyValue><Modulus>yT12/iqZ ... mLenuDgQ==</D></RSAKeyValue>";
 string issuer = "testIssuer";
-ITokenProvider<TestPayload> provider = MsJwtFactory.CreateRs256Provider<TestPayload>(RS256PrivateKey, issuer);
+ITokenProvider<TestPayload> provider
+    = MsJwtFactory.CreateRs256Provider<TestPayload>(RS256PrivateKey, issuer);
 ```
 
 ### トークンの検証
@@ -73,7 +90,8 @@ ITokenProvider<TestPayload> provider = MsJwtFactory.CreateRs256Provider<TestPayl
 string HS256CommonKey = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
 string issuer = "testIssuer";
 string audience = "testAudience";
-ITokenValidator<TestPayload> validator = MsJwtFactory.CreateHs256Validator<TestPayload>(HS256CommonKey, issuer, audience);
+ITokenValidator<TestPayload> validator
+    = MsJwtFactory.CreateHs256Validator<TestPayload>(HS256CommonKey, issuer, audience);
 
 // validate the token.
 bool valid = validator.ValidateToken(
@@ -92,7 +110,8 @@ RS256を使用する場合は、次の方法でバリデータを生成します
 string RS256PublicKey = "<RSAKeyValue><Modulus>yT12/iqZ ... XrBw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
 string issuer = "testIssuer";
 string audience = "testAudience";
-ITokenValidator<TestPayload> validator = MsJwtFactory.CreateHs256Validator<TestPayload>(RS256PublicKey, issuer, audience);
+ITokenValidator<TestPayload> validator
+    = MsJwtFactory.CreateHs256Validator<TestPayload>(RS256PublicKey, issuer, audience);
 ```
 
 #### TokenState 列挙体
@@ -200,11 +219,19 @@ private ITokenPair GetToken(TokenClaim claim, TestPayload payload)
     ITokenProvider<TestPayload> provider = GetProvider();
     
     // create a access token.
-    TokenInfo accessToken = new TokenInfo(provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
+    TokenInfo accessToken = new TokenInfo(
+        provider.CreateToken(claim, payload)
+        , claim.Expiration
+        , claim.NotBefore
+        );
 
     // create a refresh token.
     claim.Expiration = DateTimeOffset.UtcNow.AddSeconds(3600);
-    TokenInfo refreshToken = new TokenInfo(provider.CreateToken(claim, payload), claim.Expiration, claim.NotBefore);
+    TokenInfo refreshToken = new TokenInfo(
+        provider.CreateToken(claim, payload)
+        , claim.Expiration
+        , claim.NotBefore
+        );
 
     return new TokenPair(accessToken, refreshToken);
 }
